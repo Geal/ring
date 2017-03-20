@@ -1,17 +1,9 @@
 echo on
 SetLocal EnableDelayedExpansion
 
-REM This is the recommended way to choose the toolchain version, according to
-REM Appveyor's documentation.
-SET PATH=C:\Program Files (x86)\MSBuild\%TOOLCHAIN_VERSION%\Bin;%PATH%
-
-set VCVARSALL="C:\Program Files (x86)\Microsoft Visual Studio %TOOLCHAIN_VERSION%\VC\vcvarsall.bat"
-
 if [%Platform%] NEQ [x64] goto win32
 set TARGET_ARCH=x86_64
 set TARGET_PROGRAM_FILES=%ProgramFiles%
-call %VCVARSALL% amd64
-if %ERRORLEVEL% NEQ 0 exit 1
 goto download
 
 :win32
@@ -19,13 +11,9 @@ echo on
 if [%Platform%] NEQ [Win32] exit 1
 set TARGET_ARCH=i686
 set TARGET_PROGRAM_FILES=%ProgramFiles(x86)%
-call %VCVARSALL% amd64_x86
-if %ERRORLEVEL% NEQ 0 exit 1
 goto download
 
 :download
-REM vcvarsall turns echo off
-echo on
 
 mkdir windows_build_tools
 mkdir windows_build_tools\
